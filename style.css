@@ -1,0 +1,21 @@
+* { box-sizing: border-box; }
+body { font-family: system-ui, Arial, sans-serif; background: #f4f6f8; color: #1f2933; margin: 0; line-height: 1.5; }
+main { max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+h1 { margin-bottom: 1rem; }
+button { background: #2563eb; color: #fff; border: 0; border-radius: 6px; padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; }
+button:hover:not(:disabled) { background: #1d4ed8; }
+button:disabled { background: #9ca3af; cursor: not-allowed; }
+#status { min-height: 1.5rem; margin: 1rem 0; padding: 0.5rem 0.75rem; border-radius: 6px; }
+#status.info { background: #e0f2fe; color: #075985; }
+#status.success { background: #dcfce7; color: #166534; border-left: 4px solid #16a34a; }
+#status.error { background: #fee2e2; color: #991b1b; border-left: 4px solid #dc2626; }
+#notes-list { list-style: none; padding: 0; margin: 0; }
+#notes-list li { background: #fff; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+#notes-list li.empty { text-align: center; color: #6b7280; font-style: italic; }
+.note-title { margin: 0 0 0.25rem; font-size: 1.1rem; text-transform: capitalize; }
+.note-body { margin: 0 0 0.75rem; color: #4b5563; }
+.delete-btn { background: #dc2626; padding: 0.3rem 0.75rem; font-size: 0.9rem; }
+.delete-btn:hover:not(:disabled) { background: #b91c1c; }
+form { background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin: 1rem 0; }
+label { display: block; font-weight: 600; margin-bottom: 0.25rem; }
+input, textarea { width: 100%; padding: 0.5rem; margin-bottom: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font: inherit; }
