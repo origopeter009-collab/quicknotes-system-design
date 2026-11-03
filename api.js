@@ -1,4 +1,4 @@
-// QuickNotes API client (Tasks 1-2: GET + POST)
+// QuickNotes API client (Tasks 1-3: GET + POST + DELETE)
 const API_URL = "https://jsonplaceholder.typicode.com/posts";
 const MAX_TITLE = 100;
 
@@ -25,10 +25,11 @@ function setStatus(message, type) {
   statusEl.className = type || "";
 }
 
-// Disable the main controls while any request is running.
+// Disable every control (including Delete buttons) while a request is running.
 function setBusy(isBusy) {
   loadBtn.disabled = isBusy;
   submitBtn.disabled = isBusy;
+  listEl.querySelectorAll(".delete-btn").forEach((btn) => { btn.disabled = isBusy; });
 }
 
 function removeEmpty() {
@@ -52,7 +53,12 @@ function createNoteElement(note) {
   const body = document.createElement("p");
   body.className = "note-body";
   body.textContent = note.body || "";
-  li.append(title, body);
+  const delBtn = document.createElement("button");
+  delBtn.type = "button";
+  delBtn.className = "delete-btn";
+  delBtn.textContent = "Delete";
+  delBtn.addEventListener("click", () => deleteNote(note.id, li));
+  li.append(title, body, delBtn);
   return li;
 }
 
@@ -118,6 +124,36 @@ async function createNote(event) {
   } catch (error) {
     console.error(error);
     setStatus("Sorry, your note could not be saved. Please try again.", "error");
+  } finally {
+    setBusy(false);
+  }
+}
+
+/*
+ * DELETE: remove a note.
+ *
+ * JSONPlaceholder is a fake API: it accepts POST and DELETE and replies with
+ * a success status, but it never actually stores or removes anything. A note
+ * we create gets id 101 back, yet DELETE /posts/101 would not really find a
+ * saved record, and reloading the page brings the original 10 notes back.
+ *
+ * Approach: we still send the real DELETE /posts/{id} request (exactly what
+ * the real QuickNotes API will expect) and only remove the note from the page
+ * after the server answers with a success status. If the request fails, the
+ * note stays and an error message is shown. The UI therefore behaves like a
+ * real service even though the practice server forgets everything.
+ */
+async function deleteNote(id, element) {
+  setStatus("Deleting note " + id + "...", "info");
+  setBusy(true);
+  try {
+    const { status } = await request(API_URL + "/" + id, { method: "DELETE" });
+    element.remove();
+    if (listEl.children.length === 0) showEmpty();
+    setStatus("Note " + id + " deleted (status " + status + ").", "success");
+  } catch (error) {
+    console.error(error);
+    setStatus("Sorry, note " + id + " could not be deleted. Please try again.", "error");
   } finally {
     setBusy(false);
   }
